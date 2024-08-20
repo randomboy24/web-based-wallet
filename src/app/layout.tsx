@@ -18,9 +18,8 @@ export default function RootLayout({
   return (
     <html className="bg-black" lang="en">
       <body className={inter.className}>=
-        <div className="ml-72 mt-10">
+        <div className="">
           <CubeLogo />
-          <span className="text-white text-4xl font-extrabold absolute top-16 left-80 pl-5">WebVault</span>
         </div>
         {children}
       </body>

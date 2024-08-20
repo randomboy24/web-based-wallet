@@ -1,14 +1,15 @@
 export const CubeLogo = () => {
     return (
-      <div className="text-white">
+      <div className="text-white flex w-2/5 justify-center mt-3">
         <svg
           fill="#ffffff"
           version="1.1"
           id="Capa_1"
           xmlns="http://www.w3.org/2000/svg"
-          width="40px"
-          height="40px"
+          width="30px"
+          height="30px"
           viewBox="0 0 948.346 948.346"
+          className="mt-1"
         >
           <g>
             <g>
@@ -16,6 +17,7 @@ export const CubeLogo = () => {
             </g>
           </g>
         </svg>
+        <span className="text-white text-3xl font-extrabold  pl-2">WebVault</span>
       </div>
     );
   };
