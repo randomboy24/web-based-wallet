@@ -1,24 +1,13 @@
 import React from 'react';
 import { AccordionItem } from './Accordian';
 export const Wallet: React.FC = () => {
+    const publicKey = "4f5b3c1e1b29ab9dcd9f41dbe3a15e223fcfca6b8d9129f1c5a22e2a3c0f5f90"; // Replace with your actual public key
+    const privateKey = "4f5b3c1e1b29ab9dcd9f41dbe3a15e223fcfca6b8d9129f1c5a22e2a3c0f5f90"; // Replace with your actual private key
     return (
         <div>
-            <AccordionItem
-                title="What is Flowbite?"
-                content={
-                    <>
-                        <p className="mb-4 text-gray-500 dark:text-gray-400">
-                            Flowbite is an open-source library of interactive components...
-                        </p>
-                        <p className="text-gray-500 dark:text-gray-400">
-                            Check out this guide to learn how to{' '}
-                            <a href="/docs/getting-started/introduction/" className="text-blue-600 dark:text-blue-500 hover:underline">get started</a>...
-                        </p>
-                    </>
-                }
-            />
+            <AccordionItem title="Wallet Details" publicKey={publicKey} privateKey={privateKey} />
         </div>
     );
-};
+}
 
 

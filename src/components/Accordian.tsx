@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 
 interface AccordionProps {
     title: string;
-    content: React.ReactNode;
+    publicKey: string;
+    privateKey: string;
 }
 
-export const AccordionItem: React.FC<AccordionProps> = ({ title, content }) => {
+export const AccordionItem = ({ title, publicKey, privateKey }: AccordionProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const toggleAccordion = () => {
@@ -13,13 +14,13 @@ export const AccordionItem: React.FC<AccordionProps> = ({ title, content }) => {
     };
 
     return (
-        <div>
+        <div className="w-[64%] ml-[294px] mt-10">
             <h2>
                 <button
                     type="button"
                     onClick={toggleAccordion}
                     aria-expanded={isOpen}
-                    className="flex items-center justify-between w-full p-5 font-medium text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+                    className={`flex items-center justify-between w-full p-5 font-medium text-gray-500 border ${isOpen?"border-b-0":""}border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3`}
                 >
                     <span className="flex items-center">
                         {/* Replace this with your icon */}
@@ -29,18 +30,24 @@ export const AccordionItem: React.FC<AccordionProps> = ({ title, content }) => {
                         {title}
                     </span>
                     <svg className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : 'rotate-0'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5 5 1 1 5"/>
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5 5 1 1 5" />
                     </svg>
                 </button>
             </h2>
             <div
-                className={`p-5 border border-b-0 border-gray-200 dark:border-gray-700 ${isOpen ? '' : 'hidden'}`}
+                className={`p-5 border ${isOpen?"border-t-0":""} border-gray-200 dark:border-gray-700 ${isOpen ? '' : 'hidden'}`}
                 aria-labelledby="accordion-heading"
             >
-                {content}
+                <div className="mb-2">
+                    <h3 className="font-medium text-white">Public Key</h3>
+                    <p className='text-white'>{publicKey}</p>
+                </div>
+                <div>
+                    <h3 className="font-medium text-white">Private Key</h3>
+                    <p className='text-white'>{privateKey}</p>
+                </div>
             </div>
         </div>
     );
 };
-
 
