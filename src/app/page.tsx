@@ -1,5 +1,5 @@
 "use client"
-import { WalletGenerator } from "@/components/WalletGenerator";
+import { SeedGenerator } from "@/components/seedGenerator";
 import { WalletSelection } from "@/components/walletSelection"
 import { useState } from "react"
 
@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <>
       {isSolana || isEthereum?
-      <WalletGenerator />:<WalletSelection setIsEthereum={setIsEthereum} setIsSolana={setIsSolana}/>}
+      <SeedGenerator isSolana={isSolana}/>:<WalletSelection setIsEthereum={setIsEthereum} setIsSolana={setIsSolana}/>}
     </>
   )
 }
