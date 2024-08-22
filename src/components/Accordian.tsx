@@ -46,6 +46,10 @@ export const AccordionItem = ({ walletCount, publicKey, privateKey }: AccordionP
                     <h3 className="font-medium text-white">Private Key</h3>
                     <p className='text-white'>{privateKey}</p>
                 </div>
+                <div className='text-white'>
+                    <span>balance: </span>
+                    <span>$0.0</span>
+                </div>
             </div>
         </div>
     );
