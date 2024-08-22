@@ -32,6 +32,11 @@ import { HDNodeWallet } from "ethers";
             if(wallets){
                 setWallets(JSON.parse(wallets))
             }
+            const walletCount = localStorage.getItem('walletCount')?.toString();
+            if(walletCount){
+                setWalletCount(JSON.parse(walletCount));
+                console.log(walletCount);
+            }
         },[])
 
         // useEffect()
@@ -68,6 +73,7 @@ import { HDNodeWallet } from "ethers";
                                     setWallets([...wallets,{path,derivedSeed,privateKey,publicKey,id:walletCount}])
                                     setWalletCount(walletCount => {return walletCount+1})
                                     localStorage.setItem('wallets',JSON.stringify(wallets))
+                                    localStorage.setItem('walletCount',JSON.stringify(walletCount))
                                 }
                             }}>
                                 Add Wallet
@@ -76,6 +82,7 @@ import { HDNodeWallet } from "ethers";
                                 setWallets([])
                                 setWalletCount(1)
                                 localStorage.removeItem('wallets');
+                                localStorage.removeItem('walletCount');
                             }}>
                                 Clear Wallets
                             </button>
