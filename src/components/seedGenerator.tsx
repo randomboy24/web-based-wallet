@@ -6,11 +6,12 @@ import { Keypair } from '@solana/web3.js';
 import { derivePath } from 'ed25519-hd-key';
 import { cookies } from 'next/headers';
 import { WalletGenerator } from './walletGenerator';
+import { MnemonicSeedContext } from '@/context/context';
 
 
 export const SeedGenerator = ({isSolana}:{isSolana:boolean}) => {
     const [mnemonic,setMnemonic] = useState("");
-    const seed = mnemonicToSeedSync(mnemonic);
+    const [seed,setSeed] = useState<Buffer>(Buffer.alloc(0))
     const [isWalletGenerated,setIsWalletGenerated] = useState(false);
 
   return (
@@ -22,7 +23,9 @@ export const SeedGenerator = ({isSolana}:{isSolana:boolean}) => {
                     Click here to see the see the mnemonic
                 </div>
             </div>
-            <WalletGenerator isSolana={isSolana} mnemonic={mnemonic}/>
+            <MnemonicSeedContext.Provider value={{mnemonic,seed}} >
+                <WalletGenerator isSolana={isSolana} seed={seed} />
+            </MnemonicSeedContext.Provider>
         </div>
         :
         <div>
@@ -42,6 +45,7 @@ export const SeedGenerator = ({isSolana}:{isSolana:boolean}) => {
                 </button>
                 <button title='generate a wallet' className='bg-white h-12 w-40 rounded-md text-lg ml-6 font-semibold' onClick={() => {
                 setMnemonic(generateMnemonic());
+                setSeed(mnemonicToSeedSync(mnemonic))
                     setIsWalletGenerated(true);
                 }}>
                     Generate a wallet

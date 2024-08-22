@@ -1,3 +1,6 @@
-import { createContext } from "vm";
+import { createContext } from "react";
 
-export const MnemonicContext = createContext()
+export const MnemonicSeedContext = createContext({
+    mnemonic:"",
+    seed:Buffer.alloc(0)
+})
