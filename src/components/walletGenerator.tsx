@@ -1,17 +1,17 @@
-    import {  useEffect, useMemo, useState } from "react"
-    // import { Wallet } from "ethers"
+    import {  Dispatch, SetStateAction, useEffect, useMemo, useState } from "react"
     import { derivePath } from "ed25519-hd-key";
     import nacl from "tweetnacl";
     import { Wallet } from "./Wallet";
-    import { Wallet as walletFromEthers } from "ethers";
-    import {ethers} from 'ethers'
+    import { N, Wallet as walletFromEthers } from "ethers";
     import { Keypair } from "@solana/web3.js";
     import bs58 from 'bs58';
-import { HDNodeWallet } from "ethers";
+    import { HDNodeWallet } from "ethers";
+import { mnemonicToSeedSync } from "bip39";
 
     interface propTypes{
         isSolana:boolean,
-        seed:Buffer
+        seed:Buffer,
+        setSeed:Dispatch<SetStateAction<Buffer>>
     }
 
     interface walletTypes{
@@ -22,7 +22,7 @@ import { HDNodeWallet } from "ethers";
         id:number 
     }
 
-    export const WalletGenerator = ({isSolana,seed}:propTypes) => {
+    export const WalletGenerator = ({isSolana,seed,setSeed}:propTypes) => {
         const [wallets,setWallets] = useState<walletTypes[]>([]);
         const [walletCount,setWalletCount] = useState(1)
         // const [path,setPath] = useState();
@@ -36,6 +36,12 @@ import { HDNodeWallet } from "ethers";
             if(walletCount){
                 setWalletCount(JSON.parse(walletCount));
                 console.log(walletCount);
+            }
+            const mnemonic = localStorage.getItem('mnemonic');
+            console.log("mnemonic : " +mnemonic)
+            if((mnemonic==null?false:mnemonic.length>0)){
+                // seed = mnemonicToSeedSync(mnemonic);
+                setSeed(mnemonicToSeedSync(mnemonic as string))
             }
         },[])
 
@@ -61,20 +67,24 @@ import { HDNodeWallet } from "ethers";
                                 const secret = nacl.sign.keyPair.fromSeed(derivedSeed).secretKey;
                                 const publicKey = Keypair.fromSecretKey(secret).publicKey.toBase58();
                                 const privateKey = bs58.encode(secret);
-                                setWallets([...wallets,{path,derivedSeed,privateKey,publicKey,id:walletCount}])
+                                setWallets([...wallets,{path,derivedSeed,privateKey,publicKey,id:walletCount}]);
+                                setWalletCount(walletCount => {return walletCount+1});
+                                localStorage.setItem('wallets',JSON.stringify(wallets));
+                                localStorage.setItem('walletCount',JSON.stringify(walletCount));
                                 }
                                 else{
                                     const hdNode = HDNodeWallet.fromSeed(seed);
                                     const child = hdNode.derivePath(path);
                                     const privateKey = child.privateKey;
                                     const wallet = new walletFromEthers(privateKey);
-                                    const publicKey = wallet.address
+                                    const publicKey = wallet.address;
                                     console.log(publicKey);
                                     setWallets([...wallets,{path,derivedSeed,privateKey,publicKey,id:walletCount}])
                                     setWalletCount(walletCount => {return walletCount+1})
                                     localStorage.setItem('wallets',JSON.stringify(wallets))
                                     localStorage.setItem('walletCount',JSON.stringify(walletCount))
                                 }
+                                console.log(seed)
                             }}>
                                 Add Wallet
                             </button>
@@ -83,6 +93,8 @@ import { HDNodeWallet } from "ethers";
                                 setWalletCount(1)
                                 localStorage.removeItem('wallets');
                                 localStorage.removeItem('walletCount');
+                                localStorage.removeItem('mnemonic');
+                                // window.location.reload();
                             }}>
                                 Clear Wallets
                             </button>
