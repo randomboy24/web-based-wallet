@@ -14,7 +14,7 @@ export const AccordionItem = ({ walletCount, publicKey, privateKey }: AccordionP
     };
 
     return (
-        <div className="w-[64%] ml-[294px] mt-10">
+        <div className="md:w-[64%] md:ml-[294px] mt-10">
             <h2>
                 <button
                     type="button"
