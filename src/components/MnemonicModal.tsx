@@ -1,5 +1,4 @@
-import { X } from "lucide-react"
-import { useState } from "react"
+import {  X } from "lucide-react"
 
 
 interface propTypes {
@@ -24,7 +23,7 @@ export const MnemonicModal = ({setIsMnemonicModalOpen,mnemonic}:propTypes) => {
                         Do <u>not</u> share your secret phase if someone has your secret phrase they will have full control of your wallet. 
                     </div>
                     <div className="grid grid-rows-3 grid-cols-3 ">
-                        {mnemonic.map(word => <div className="mx-2 my-2 text-left bg-gray-900 rounded-md h-8 pl-1 pt-1 ">{mnemonic.indexOf(word)+1}. {word}
+                        {mnemonic.map((word,index) => <div key={index}className="mx-2 my-2 text-left bg-gray-900 rounded-md h-8 pl-1 pt-1 ">{mnemonic.indexOf(word)+1}. {word}
                            
                         </div>
  )}
