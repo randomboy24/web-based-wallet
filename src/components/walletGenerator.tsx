@@ -60,17 +60,24 @@ import { mnemonicToSeedSync } from "bip39";
                             {isSolana?"Solana Wallet":"Ethereum Wallet"}
                         </div>
                         <div className="flex">
-                            <button className="bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-12 w-40 mr-2 md:mr-4 rounded-lg" onClick={() => {
+                            <button className="bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-12 w-40 mr-2 md:mr-4 rounded-lg" onClick={async () => {
                                 // const {seed} = useContext(MnemonicSeedContext);
                                 const derivedSeed = derivePath(path,seed.toString('hex')).key;
                                 if(isSolana){
                                 const secret = nacl.sign.keyPair.fromSeed(derivedSeed).secretKey;
                                 const publicKey = Keypair.fromSecretKey(secret).publicKey.toBase58();
                                 const privateKey = bs58.encode(secret);
-                                setWallets([...wallets,{path,derivedSeed,privateKey,publicKey,id:walletCount}]);
-                                setWalletCount(walletCount => {return walletCount+1});
-                                // localStorage.setItem('wallets',JSON.stringify(wallets));
-                                // localStorage.setItem('walletCount',JSON.stringify(walletCount));
+                                setWallets(prevWallets => {
+                                    const newWallets = [...prevWallets, {path, derivedSeed, privateKey, publicKey, id: walletCount}];
+                                    localStorage.setItem('wallets', JSON.stringify(newWallets));
+                                    return newWallets;
+                                });
+                                setWalletCount(prevCount => {
+                                    const newCount = prevCount + 1;
+                                    localStorage.setItem('walletCount', JSON.stringify(newCount));
+                                    return newCount;
+                                });
+                                
                                 }
                                 else{
                                     const hdNode = HDNodeWallet.fromSeed(seed);
@@ -79,12 +86,17 @@ import { mnemonicToSeedSync } from "bip39";
                                     const wallet = new walletFromEthers(privateKey);
                                     const publicKey = wallet.address;
                                     console.log(publicKey);
-                                    setWallets([...wallets,{path,derivedSeed,privateKey,publicKey,id:walletCount}])
-                                    setWalletCount(walletCount => {return walletCount+1})
+                                    setWallets(prevWallets => {
+                                        const newWallets = [...prevWallets, {path, derivedSeed, privateKey, publicKey, id: walletCount}];
+                                        localStorage.setItem('wallets', JSON.stringify(newWallets));
+                                        return newWallets;
+                                    });
+                                    setWalletCount(prevCount => {
+                                        const newCount = prevCount + 1;
+                                        localStorage.setItem('walletCount', JSON.stringify(newCount));
+                                        return newCount;
+                                    });                                    
                                 }
-                                localStorage.setItem('wallets',JSON.stringify(wallets))
-                                localStorage.setItem('walletCount',JSON.stringify(walletCount))
-                                console.log(seed)
                             }}>
                                 Add Wallet
                             </button>
