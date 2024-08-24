@@ -4,13 +4,14 @@ import { generateMnemonic, mnemonicToSeedSync } from 'bip39';
 import { WalletGenerator } from './walletGenerator';
 import { MnemonicSeedContext } from '@/context/context';
 import { MnemonicModal } from './MnemonicModal';
+import { Spinner } from './Spinner';
 
 export const SeedGenerator = ({ isSolana }: { isSolana: boolean }) => {
     const [mnemonic, setMnemonic] = useState<string>("");
     const [seed, setSeed] = useState<Buffer>(Buffer.alloc(0));
     const [isWalletGenerated, setIsWalletGenerated] = useState(false);
     const [isMnemonicModalOpen,setIsMnemonicModalOpen] = useState(false)
-
+    const [isLoading,setIsLoading] = useState(true)
     useEffect(() => {
         const storedMnemonic = localStorage.getItem('mnemonic');
         if (storedMnemonic) {
@@ -18,6 +19,7 @@ export const SeedGenerator = ({ isSolana }: { isSolana: boolean }) => {
             setSeed(mnemonicToSeedSync(storedMnemonic));
             setIsWalletGenerated(true);
         }
+        setIsLoading(false)
     }, []);
 
     const generateWallet = () => {
@@ -34,7 +36,12 @@ export const SeedGenerator = ({ isSolana }: { isSolana: boolean }) => {
 
     return (
         <div>
-            {isWalletGenerated ? (
+            {isLoading?
+                <div className='flex h-screen justify-center items-center'>
+                    <Spinner />
+                </div>
+            :
+            isWalletGenerated ? (
                 <div>
                     <div className='flex md:justify-center mt-20 md:mr-20'>
                         <div className='text-white h-24 border border-gray-800 hover:bg-gray-800 hover:text-gray-200 text-4xl md:w-2/3 text-center pt-2 md:pt-6 rounded-lg hover:cursor-pointer' onClick={() => { setIsMnemonicModalOpen(true)}}>
@@ -68,7 +75,8 @@ export const SeedGenerator = ({ isSolana }: { isSolana: boolean }) => {
                     </div>
                     
                 </div>
-            )}
+            )
+            }
         </div>
     );
 }
