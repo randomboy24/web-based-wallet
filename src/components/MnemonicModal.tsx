@@ -18,7 +18,7 @@ export const MnemonicModal = ({setIsMnemonicModalOpen,mnemonic}:propTypes) => {
     return (
         <div className="fixed inset-0 backdrop-blur-sm text-white ">
             <div className="text-white flex flex-col h-screen justify-center items-center">
-                <div className="flex flex-col border px-6 bg-gray-800">
+                <div className="flex flex-col border border-gray-800 rounded-lg px-6 bg-gray-800">
                     <div className="text-red-700 max-w-96 mt-3">
                         Do <u>not</u> share your secret phase if someone has your secret phrase they will have full control of your wallet. 
                     </div>
