@@ -2,7 +2,6 @@
 import { SeedGenerator } from "@/components/seedGenerator";
 import { Spinner } from "@/components/Spinner";
 import { WalletSelection } from "@/components/walletSelection"
-import { setupFsCheck } from "next/dist/server/lib/router-utils/filesystem";
 import { useEffect, useState } from "react"
 
 const Home = () => {
@@ -20,7 +19,7 @@ const Home = () => {
   return (
     <>{isLoading?<div className="flex h-screen items-center justify-center "> <Spinner /> </div>:
       ((isSolana || isEthereum) || mnemonicExists)?
-        <SeedGenerator isSolana={isSolana}/>:<WalletSelection setIsEthereum={setIsEthereum} setIsSolana={setIsSolana}/>
+        <SeedGenerator isSolana={isSolana} setIsSolana={setIsSolana}/>:<WalletSelection setIsEthereum={setIsEthereum} setIsSolana={setIsSolana}/>
     }
      
     </>

@@ -1,17 +1,25 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { generateMnemonic, mnemonicToSeedSync } from 'bip39';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from 'bip39';
 import { WalletGenerator } from './walletGenerator';
-import { MnemonicSeedContext } from '@/context/context';
 import { MnemonicModal } from './MnemonicModal';
 import { Spinner } from './Spinner';
+import {  X } from 'lucide-react';
 
-export const SeedGenerator = ({ isSolana }: { isSolana: boolean }) => {
+interface propTypes{
+    isSolana : boolean,
+    setIsSolana:Dispatch<SetStateAction<boolean>>
+}
+
+export const SeedGenerator = ({ isSolana ,setIsSolana}: propTypes) => {
     const [mnemonic, setMnemonic] = useState<string>("");
     const [seed, setSeed] = useState<Buffer>(Buffer.alloc(0));
     const [isWalletGenerated, setIsWalletGenerated] = useState(false);
     const [isMnemonicModalOpen,setIsMnemonicModalOpen] = useState(false)
     const [isLoading,setIsLoading] = useState(true)
+    const [isImportingMnemonic,setIsImportingMnemonic] = useState(false)
+    const [importMnemonic,setImportMnemonic] = useState<string[]>(Array(12).fill(""))
+
     useEffect(() => {
         const storedMnemonic = localStorage.getItem('mnemonic');
         if (storedMnemonic) {
@@ -20,7 +28,10 @@ export const SeedGenerator = ({ isSolana }: { isSolana: boolean }) => {
             setIsWalletGenerated(true);
         }
         setIsLoading(false)
-    }, []);
+        if(localStorage.getItem('isSolana') == "true"){
+            setIsSolana(true)
+        }
+    }, [setIsSolana]);
 
     const generateWallet = () => {
         const newMnemonic = generateMnemonic();
@@ -31,11 +42,125 @@ export const SeedGenerator = ({ isSolana }: { isSolana: boolean }) => {
         setIsWalletGenerated(true);
 
         localStorage.setItem("mnemonic", newMnemonic);
-        console.log("mnemonic is : " + newMnemonic);
+        console.log("mnemonic is : " + newMnemonic+"\n" + typeof(mnemonic));
     };
+
 
     return (
         <div>
+            {isImportingMnemonic?
+            <div className='fixed inset-0 backdrop-blur-sm flex flex-col justify-center items-center text-white   '>
+                <div className='flex flex-col border-2 border-gray-800 bg-[#222] w-[420px] items-center rounded-xl '>
+                    <div className=' mt-5  text-white text-2xl text-center'>
+                        Secret Recovery Phase
+                    </div>
+                    <div className=' my-2 text-gray-500 text-lg  text-center'>
+                        Import an existing wallet with your 12 word secret recovery phase.
+                    </div>
+                    <div className=' my-4 grid grid-cols-3 grid-rows-4'>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='1'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[0] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='2'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[1] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='3'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[2] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='4'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[3] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='5'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[4] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='6'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[5] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='7'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[6] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='8'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[7] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='9'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[8] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='10'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[9] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='11'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[10] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                        <input className='mx-3 my-2 pl-1 bg-[#111111] border border-gray-800 w-24 h-10 rounded-lg' placeholder='12'onChange={(e) => {
+                            setImportMnemonic((prevValue) => {
+                                const newValue = [...prevValue];
+                                newValue[11] = e.target.value; // Assuming you're updating the first word in the mnemonic
+                                return newValue;
+                            })
+                        }}></input>
+                    </div>
+                    <button className='w-[95%] h-12 mt-4 rounded-lg bg-[#333]' onClick={() => {
+
+                        if(!validateMnemonic(importMnemonic.join(' ').toString())){
+                            alert("invalid mnemonic")
+                            return;
+                        }
+                        const newSeed = mnemonicToSeedSync(importMnemonic.join(' ').toString());
+                        setSeed(newSeed);
+                        setIsWalletGenerated(true);
+
+                        localStorage.setItem("mnemonic", importMnemonic.join(" ").toString());
+                        setIsImportingMnemonic(false)
+                        
+                    }}>Import a Wallet</button>
+                    <X className='text-gray-300 bg-red-900 relative bottom-[442px] left-[190px] rounded-sm hover:cursor-pointer' onClick={() => setIsImportingMnemonic(false)}/>
+                </div>
+            </div>
+            :null}
             {isLoading?
                 <div className='flex h-screen justify-center items-center'>
                     <Spinner />
@@ -48,9 +173,9 @@ export const SeedGenerator = ({ isSolana }: { isSolana: boolean }) => {
                             Click here to see the mnemonic
                         </div>
                     </div>
-                    <MnemonicSeedContext.Provider value={{ mnemonic, seed }}>
-                        <WalletGenerator isSolana={isSolana} seed={seed} setSeed={setSeed} />
-                    </MnemonicSeedContext.Provider>
+                   
+                        <WalletGenerator isSolana={isSolana} seed={seed} setSeed={setSeed} setIsSolana={setIsSolana}/>
+                    
                     {isMnemonicModalOpen?<MnemonicModal setIsMnemonicModalOpen={setIsMnemonicModalOpen} mnemonic={mnemonic.split(" ")}/>:null}
                 </div>
             ) : (
@@ -66,7 +191,10 @@ export const SeedGenerator = ({ isSolana }: { isSolana: boolean }) => {
                         </div>
                     </div>
                     <div className='flex md:justify-center md:w-2/6 ml-2 md:ml-20 mt-3 md:pl-4'>
-                        <button title='import a wallet' className='bg-white h-12 w-20  rounded-md text-lg font-semibold md:ml-6 hover:bg-gray-800 hover:text-gray-200 '>
+                        <button title='import a wallet' className='bg-white h-12 w-20  rounded-md text-lg font-semibold md:ml-6 hover:bg-gray-800 hover:text-gray-200 '
+                        onClick={() => {
+                            setIsImportingMnemonic(true)
+                        }}>
                             Import
                         </button>
                         <button title='generate a wallet' className='bg-white h-12 w-40  rounded-md text-lg ml-2 md:ml-6 font-semibold hover:bg-gray-800 hover:text-gray-200 ' onClick={generateWallet}>

@@ -1,3 +1,5 @@
+
+
 export const WalletSelection = ({setIsEthereum,setIsSolana}:any) => {
     return (
         <div className="flex justify-center">
@@ -11,11 +13,13 @@ export const WalletSelection = ({setIsEthereum,setIsSolana}:any) => {
                 <div className="mt-5">
                     <button className="text-black bg-white ml-8 md:ml-52 h-12 w-36 hover:bg-gray-800 hover:text-gray-200 rounded-lg" onClick={() => {
                         setIsSolana(true)
+                        localStorage.setItem('isSolana','true')
                     }}>
                     Solana
                     </button>
                     <button className="text-black bg-white ml-2 h-12 w-40 hover:bg-gray-800 hover:text-gray-200  rounded-lg" onClick={() => {
                         setIsEthereum(true)
+                        
                     }}>
                     Ethereum
                     </button>
