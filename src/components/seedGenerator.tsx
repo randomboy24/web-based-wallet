@@ -42,7 +42,7 @@ export const SeedGenerator = ({ isSolana ,setIsSolana}: propTypes) => {
         setIsWalletGenerated(true);
 
         localStorage.setItem("mnemonic", newMnemonic);
-        console.log("mnemonic is : " + newMnemonic+"\n" + typeof(mnemonic));
+        // console.log("mnemonic is : " + newMnemonic+"\n" + typeof(mnemonic));
     };
 
 
@@ -143,9 +143,10 @@ export const SeedGenerator = ({ isSolana ,setIsSolana}: propTypes) => {
                             })
                         }}></input>
                     </div>
-                    <button className='w-[95%] h-12 mt-4 rounded-lg bg-[#333]' onClick={() => {
+                    <button className='w-[95%] h-12 mt-4 rounded-lg bg-[#333] transform transition-transform duration-300 hover:scale-105' onClick={() => {
 
-                        if(!validateMnemonic(importMnemonic.join(' ').toString())){
+                        if(!(validateMnemonic(importMnemonic.join(' ').toString()))){
+                            // console.log(importMnemonic)
                             alert("invalid mnemonic")
                             return;
                         }
@@ -154,6 +155,7 @@ export const SeedGenerator = ({ isSolana ,setIsSolana}: propTypes) => {
                         setIsWalletGenerated(true);
 
                         localStorage.setItem("mnemonic", importMnemonic.join(" ").toString());
+                        setMnemonic(importMnemonic.join(" ").toString())
                         setIsImportingMnemonic(false)
                         
                     }}>Import a Wallet</button>
@@ -169,7 +171,7 @@ export const SeedGenerator = ({ isSolana ,setIsSolana}: propTypes) => {
             isWalletGenerated ? (
                 <div>
                     <div className='flex md:justify-center mt-20 md:mr-20'>
-                        <div className='text-white h-24 border border-gray-800 hover:bg-gray-800 hover:text-gray-200 text-4xl md:w-2/3 text-center pt-2 md:pt-6 rounded-lg hover:cursor-pointer' onClick={() => { setIsMnemonicModalOpen(true)}}>
+                        <div className='text-white h-24 border border-gray-800 hover:bg-gray-800 hover:text-gray-200 text-4xl md:w-2/3 text-center pt-2 md:pt-6 rounded-lg hover:cursor-pointer transform transition-transform duration-300 hover:scale-105' onClick={() => { setIsMnemonicModalOpen(true)}}>
                             Click here to see the mnemonic
                         </div>
                     </div>
@@ -191,13 +193,13 @@ export const SeedGenerator = ({ isSolana ,setIsSolana}: propTypes) => {
                         </div>
                     </div>
                     <div className='flex md:justify-center md:w-2/6 ml-2 md:ml-20 mt-3 md:pl-4'>
-                        <button title='import a wallet' className='bg-white h-12 w-20  rounded-md text-lg font-semibold md:ml-6 hover:bg-gray-800 hover:text-gray-200 '
+                        <button title='import a wallet' className='bg-white h-12 w-20  rounded-md text-lg font-semibold md:ml-6 hover:bg-gray-800 hover:text-gray-200 transform transition-transform duration-300 hover:scale-105'
                         onClick={() => {
                             setIsImportingMnemonic(true)
                         }}>
                             Import
                         </button>
-                        <button title='generate a wallet' className='bg-white h-12 w-40  rounded-md text-lg ml-2 md:ml-6 font-semibold hover:bg-gray-800 hover:text-gray-200 ' onClick={generateWallet}>
+                        <button title='generate a wallet' className='bg-white h-12 w-40  rounded-md text-lg ml-2 md:ml-6 font-semibold hover:bg-gray-800 hover:text-gray-200 transform transition-transform duration-300 hover:scale-105' onClick={generateWallet}>
                             Generate a wallet
                         </button>
                     </div>

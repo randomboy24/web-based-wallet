@@ -14,7 +14,7 @@ export const MnemonicModal = ({setIsMnemonicModalOpen,mnemonic}:propTypes) => {
             alert("Failed to copy.")
         });
     }
-    console.log(mnemonic)
+    // console.log(mnemonic)
     return (
         <div className="fixed inset-0 backdrop-blur-sm text-white ">
             <div className="text-white flex flex-col h-screen justify-center items-center">
