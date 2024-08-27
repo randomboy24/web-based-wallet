@@ -70,10 +70,10 @@ export const Wallet = ({ wallet,isSolana,setWallets}: propTypes ) => {
                     aria-expanded={isOpen}
                     className={`flex items-center justify-between w-full p-5 font-medium text-gray-500 border ${isOpen?"border-b-0":""}border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3`}
                 >
-                    <span className="flex items-center text-2xl font-serif font-semibold">
+                    <span className="flex items-center text-xl  font-semibold">
                         {/* Replace this with your icon */}
                         {isSolana?<Image className="w-8 mr-2" width={10} height={10} src="/solana-sol-logo.svg" alt="solana icon"/>:<Image className="w-8 h-10 mr-2" width={10} height={10} src="/ethereum-eth-logo.svg" alt="ethereum icon"/>}
-                        {`Wallet ${wallet.id }`}
+                        {`Wallet ${wallet.id +1}`}
                     </span>
                     <svg className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : 'rotate-0'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5 5 1 1 5" />
