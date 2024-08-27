@@ -49,7 +49,7 @@ export const SeedGenerator = ({ isSolana ,setIsSolana}: propTypes) => {
     return (
         <div>
             {isImportingMnemonic?
-            <div className='fixed inset-0 backdrop-blur-sm flex flex-col justify-center items-center text-white   '>
+            <div className='fixed inset-0 backdrop-blur-sm z-50 flex flex-col justify-center items-center text-white   '>
                 <div className='flex flex-col border-2 border-gray-800 bg-[#222] w-[420px] items-center rounded-xl '>
                     <div className=' mt-5  text-white text-2xl text-center'>
                         Secret Recovery Phase
