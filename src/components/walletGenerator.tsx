@@ -119,9 +119,9 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
     }
 
     return (
-        <div>
-            {clearWallet?<div className="fixed inset-0 backdrop-blur-sm flex flex-col justify-center items-center text-white">
-               <div className="flex flex-col w-[550px] bg-gray-950 border border-gray-700 rounded-lg">
+        <div className="">
+            {clearWallet?<div className="fixed inset-0 z-50 backdrop-blur-sm flex flex-col justify-center items-center text-white w-screen">
+               <div className="flex flex-col md:w-[30%] bg-gray-950 border border-gray-700 rounded-lg w-[80%] ">
                 <div className="text-xl mt-8 ml-3">
                     Are you sure you want to delete all the wallets ? 
                 </div>
@@ -146,8 +146,8 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
                 </div>
                </div>
             </div>:null}
-            <div className="flex md:justify-center mt-10">
-                <div className="flex justify-between md:w-2/3">
+            <div className="flex justify-center mt-16">
+                <div className="flex justify-between md:w-2/3 md:mr-5 w-[96%] ">
                     <div className="text-4xl text-white font-bold">
                         {isSolana?"Solana Wallet":"Ethereum Wallet"}
                     </div>
