@@ -157,7 +157,7 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
                         <button className="bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-10 w-28 md:h-12 md:w-40 mr-2 md:mr-4 rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={handleAddWallet}>
                             Add Wallet
                         </button>
-                        <button className="bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-10 w-28 md:h-12 md:w-40 mr-16 rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={() => {
+                        <button className="bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-10 w-28 md:h-12 md:w-40 md:mr-16 mr-30 rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={() => {
                            setClearWallet(true);;
                         }}>
                             Clear Wallets
