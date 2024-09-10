@@ -9,6 +9,7 @@ import { mnemonicToSeedSync } from "bip39";
 import axios from 'axios';
 import { Spinner } from "./Spinner";
 import {Wallet } from "./Wallet";
+import Dropdown from "./dropDown";
 
 
 interface propTypes{
@@ -28,6 +29,7 @@ export interface walletTypes{
 }
 
 export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) => {
+    const [isMainnet,setIsMainnet] = useState(true)
     const [wallets,setWallets] = useState<walletTypes[]>([]);
     // const [walletCount,setWalletCount] = useState(0);
     const [clearWallet,setClearWallet] = useState(false)
@@ -41,7 +43,13 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
         // }
         const wallets = localStorage.getItem('wallets')
         if(wallets){
-            setWallets(JSON.parse(wallets))
+            try{
+                setWallets(JSON.parse(wallets))
+            }
+            catch(error){
+                console.error("error occured when parsing the wallets.")
+            }
+            
         }
         const mnemonic = localStorage.getItem('mnemonic');
         if((mnemonic==null?false:mnemonic.length>0)){
@@ -62,15 +70,42 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
 
     const path = useMemo(() => {
                     // console.log(`m/44'/${isSolana?'501':'60'}'/${wallets.length > 0? wallets[wallets.length - 1].id:wallets[wallets.length].id}'/0'`)
-                    return `m/44'/${isSolana?'501':'60'}'/${wallets.length > 0? wallets.length ==1 ? 1: wallets[wallets.length - 1].id:0}'/0'`
+                    return `m/44'/${isSolana?'501':'60'}'/${wallets.length}'/0'`
     },[wallets,isSolana])
     
+    async function handleRefresh() {
+        const newWallets = wallets.map(async (wallet) =>  {
+            const response = await axios.post(isSolana?isMainnet?process.env.NEXT_PUBLIC_SOLANA_MAIN_NET_URL as string:process.env.NEXT_PUBLIC_SOLANA_DEV_NET_URL as string:process.env.NEXT_PUBLIC_ETHEREUM_MAIN_NET_URL as string,
+                isSolana?
+                {
+                    jsonrpc: "2.0",
+                    id: 1,
+                    method: "getBalance",
+                    params: [wallet.publicKey]
+            }:
+            {  
+                jsonrpc: "2.0",
+                id: 1,
+                method: "eth_getBalance",
+                params: [wallet.publicKey, "latest"]
+        }
+            )
+
+            const newbalance = isSolana?response.data.result.value/Math.pow(10,9): (parseInt(response.data.result,16))/Math.pow(10,18);
+            return {...wallet,balance:newbalance};
+        })
+
+        const promisifiedWallets = await Promise.all(newWallets);
+        localStorage.setItem("wallets",JSON.stringify(promisifiedWallets));
+        setWallets(promisifiedWallets)
+
+    }
 
     async function handleAddWallet() {
-        console.log("i")
         if(isloading){
             return;
         }
+        console.log(path)
         setIsLoading(true)
         // const {seed} = useContext(MnemonicSeedContext);
         const derivedSeed = derivePath(path,seed.toString('hex')).key;
@@ -78,7 +113,7 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
         const secret = nacl.sign.keyPair.fromSeed(derivedSeed).secretKey;
         const publicKey = Keypair.fromSecretKey(secret).publicKey.toBase58();
         const privateKey = bs58.encode(secret);
-        const response =  await axios.post("https://solana-mainnet.g.alchemy.com/v2/b46SxpAAom-FUEOAVdGUuii9VYguZVrv",{
+        const response =  await axios.post(isMainnet?process.env.NEXT_PUBLIC_SOLANA_MAIN_NET_URL  as string:process.env.NEXT_PUBLIC_SOLANA_DEV_NET_URL  as string,{
                 jsonrpc: "2.0",
                 id: 1,
                 method: "getBalance",
@@ -98,9 +133,9 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
             const child = hdNode.derivePath(path);
             const privateKey = child.privateKey;
             const wallet = new walletFromEthers(privateKey);
-            const publicKey = wallet.address;
+            const publicKey = wallet.address; 
             
-            const response = await axios.post("https://eth-mainnet.g.alchemy.com/v2/b46SxpAAom-FUEOAVdGUuii9VYguZVrv",{  
+            const response = await axios.post(isMainnet?process.env.NEXT_PUBLIC_ETHEREUM_MAIN_NET_URL as string:process.env.NEXT_PUBLIC_ETHEREUM_DEV_NET_URL as string,{  
                     jsonrpc: "2.0",
                     id: 1,
                     method: "eth_getBalance",
@@ -148,16 +183,23 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
             </div>:null}
             <div className="flex justify-center mt-16">
                 <div className="flex justify-between md:w-2/3 md:mr-5 w-[96%] ">
-                    <div className="text-4xl text-white font-bold">
-                        {isSolana?"Solana Wallet":"Ethereum Wallet"}
+                    <div className="text-4xl text-white font-bold flex">
+                        <div className="mt-2">
+                            {isSolana?"Solana Wallet":"Ethereum Wallet"}
+                        </div>
+                        <div className="md: ml-6">
+                            <Dropdown isMainnet={isMainnet} setIsMainnet={setIsMainnet}/>
+                        </div>
                     </div>
-                    <div className="flex ml-16 mt-2 md:mt-0 md:ml-0">
+                    <div className="flex md:flex-row flex-col  mt-2 md:mt-0 md:ml-0">
                         
-
-                        <button className="bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-10 w-28 md:h-12 md:w-40 mr-2 md:mr-4 rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={handleAddWallet}>
+                        <button className="mt-1 bg-white text-black hover:bg-gray-800 hover:text-gray-200 rounded-lg md:mr-4  w-16 h-8 md:w-24 md:h-12 transform transition-transform duration-300 hover:scale-105" onClick={handleRefresh}>
+                            Refresh
+                        </button>
+                        <button className="mt-1 bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-8 w-24 md:h-12 md:w-40 mr-2 md:mr-4 rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={handleAddWallet}>
                             Add Wallet
                         </button>
-                        <button className="bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-10 w-28 md:h-12 md:w-40 md:mr-16 mr-30 rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={() => {
+                        <button className="mt-1 bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-10 w-24 md:h-12 md:w-40 md:mr-16 mr-30 rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={() => {
                            setClearWallet(true);;
                         }}>
                             Clear Wallets
