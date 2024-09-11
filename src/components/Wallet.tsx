@@ -30,7 +30,7 @@ export const Wallet = ({ wallet,isSolana,setWallets}: propTypes ) => {
             <div className="md:w-[64%]  w-screen mt-10 ">
                 {
                     isWalletDeleteModalOpen? 
-                    <div className='fixed inset-0 backdrop-blur-sm flex flex-col justify-center items-center text-white'>
+                    <div className='fixed inset-0 backdrop-blur-sm flex z-50 flex-col justify-center items-center text-white'>
                         <div className='flex flex-col border border-[#222] rounded-lg  bg-[#111] md:w-[30%] w-screen '>
                             <div className='text-xl mx-5 my-3 mt-7 font-semibold'>
                                 Are you sure you want to delete all wallets?
@@ -88,7 +88,7 @@ export const Wallet = ({ wallet,isSolana,setWallets}: propTypes ) => {
                     <div className="mb-2  border-b border-gray-500">
                         <h3 className="font-medium text-white">Public Key</h3>
                         <div className='flex justify-between'>
-                        <p className=' mt-2 text-gray-500'>{window.innerWidth > 768?wallet.publicKey:`${wallet.publicKey.substring(0,39)}......`}</p>
+                        <p className=' mt-2 text-gray-500'>{window.innerWidth > 768?wallet.publicKey:`${wallet.publicKey.substring(0,30)}......`}</p>
                         <Image className='hover:cursor-pointer mb-2' width={30} height={30} src="/delete.svg" alt="delete icon" onClick={() => {
                             setIsDeleteModalOpen(true)
                         }}/>
@@ -98,7 +98,7 @@ export const Wallet = ({ wallet,isSolana,setWallets}: propTypes ) => {
                         <h3 className="font-medium text-white">Private Key</h3>
                         {isPrivKeyShown?
                         <div className='flex justify-between mt-2'>
-                            <p className=' pb-2  text-gray-500'>{window.innerWidth > 768 ? wallet.privateKey:`${wallet.privateKey.substring(0,42)}.....`}</p>
+                            <p className=' pb-2  text-gray-500'>{window.innerWidth > 768 ? wallet.privateKey:`${wallet.privateKey.substring(0,33)}.....`}</p>
                             <EyeOffIcon className='hover:cursor-pointer h-8 text-gray-200' onClick={() => setisPrivKeyShown(!isPrivKeyShown)}/>
                         </div>:
                         <div className='flex justify-between'>

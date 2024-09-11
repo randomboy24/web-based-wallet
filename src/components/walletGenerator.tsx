@@ -190,7 +190,7 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
                             <Dropdown isMainnet={isMainnet} setIsMainnet={setIsMainnet}/>
                         </div>
                     </div>
-                    <div className="flex md:flex-row justify-around md:justify-center mt-10 md:mt-0 md:ml-0  flex-wrap gap-4">
+                    <div className="flex md:flex-row justify-around md:justify-center mt-10 md:mt-0 md:ml-0  flex-wrap gap-[14px]">
                         
                         <button className="mt-1 bg-white text-black hover:bg-gray-800 hover:text-gray-200 rounded-lg  w-24 h-10 md:w-24 md:h-12 transform transition-transform duration-300 hover:scale-105" onClick={handleRefresh}>
                             Refresh
