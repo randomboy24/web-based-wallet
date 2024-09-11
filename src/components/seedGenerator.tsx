@@ -170,7 +170,7 @@ export const SeedGenerator = ({ isSolana ,setIsSolana}: propTypes) => {
             :
             isWalletGenerated ? (
                 <div>
-                    <div className='flex justify-center mt-20 md:mr-20'>
+                    <div className='flex justify-center mt-20 '>
                         <div className='text-white h-24 border border-gray-800 hover:bg-gray-800 hover:text-gray-200 text-4xl md:w-2/3 w-[96%] text-center pt-2 md:pt-6 rounded-lg hover:cursor-pointer transform transition-transform duration-300 hover:scale-105' onClick={() => { setIsMnemonicModalOpen(true)}}>
                             Click here to see the mnemonic
                         </div>

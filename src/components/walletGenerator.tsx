@@ -105,7 +105,6 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
         if(isloading){
             return;
         }
-        console.log(path)
         setIsLoading(true)
         // const {seed} = useContext(MnemonicSeedContext);
         const derivedSeed = derivePath(path,seed.toString('hex')).key;
@@ -181,8 +180,8 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
                 </div>
                </div>
             </div>:null}
-            <div className="flex justify-center mt-16">
-                <div className="flex md:flex-row flex-col justify-between md:w-2/3 md:mr-5 w-[96%] ">
+            <div className="flex justify-center mt-16 ">
+                <div className="flex md:flex-row flex-col justify-between md:w-[64%] w-[96%]  ">
                     <div className="text-4xl text-white font-bold flex justify-around md:justify-start ">
                         <div className={`mt-4 md:mt-2 ${isSolana?'mr-5':null} md:mr-0`}>
                             {isSolana?"Solana Wallet":"Ethereum Wallet"}
@@ -191,15 +190,15 @@ export const WalletGenerator = ({isSolana,seed,setSeed,setIsSolana}:propTypes) =
                             <Dropdown isMainnet={isMainnet} setIsMainnet={setIsMainnet}/>
                         </div>
                     </div>
-                    <div className="flex md:flex-row justify-around md:justify-start mt-10 md:mt-0 md:ml-0 ">
+                    <div className="flex md:flex-row justify-around md:justify-center mt-10 md:mt-0 md:ml-0  flex-wrap gap-4">
                         
-                        <button className="mt-1 bg-white text-black hover:bg-gray-800 hover:text-gray-200 rounded-lg md:mr-4  w-24 h-10 md:w-24 md:h-12 transform transition-transform duration-300 hover:scale-105" onClick={handleRefresh}>
+                        <button className="mt-1 bg-white text-black hover:bg-gray-800 hover:text-gray-200 rounded-lg  w-24 h-10 md:w-24 md:h-12 transform transition-transform duration-300 hover:scale-105" onClick={handleRefresh}>
                             Refresh
                         </button>
-                        <button className="mt-1 bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-10 w-24 md:h-12 md:w-40 mr-2 md:mr-4 rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={handleAddWallet}>
+                        <button className="mt-1 bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-10 w-24 md:h-12 md:w-40 mr-2 md:mr-0 rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={handleAddWallet}>
                             Add Wallet
                         </button>
-                        <button className="mt-1 bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-10 w-32 md:h-12 md:w-40 md:mr-16  md:mr-30 rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={() => {
+                        <button className="mt-1 bg-white text-black hover:bg-gray-800 hover:text-gray-200  h-10 w-32 md:h-12 md:w-40  rounded-lg transform transition-transform duration-300 hover:scale-105" onClick={() => {
                            setClearWallet(true);;
                         }}>
                             Clear Wallets
