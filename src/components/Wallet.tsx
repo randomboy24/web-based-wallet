@@ -86,9 +86,10 @@ export const Wallet = ({ wallet,isSolana,setWallets}: propTypes ) => {
                     aria-labelledby="accordion-heading"
                 >
                     <div className="mb-2  border-b border-gray-500">
-                        <h3 className="font-medium text-white">Public Key</h3>
+                        <h3 className="font-medium text-white">Public Key</h3> 
                         <div className='flex justify-between'>
-                        <p className=' mt-2 text-gray-500'>{window.innerWidth > 768?wallet.publicKey:`${wallet.publicKey.substring(0,30)}......`}</p>
+                        <p className=' mt-2 text-gray-500 hidden md:block'>{wallet.publicKey}</p>
+                        <p className=' mt-2 text-gray-500 block md:hidden'>{wallet.publicKey.substring(0,30)}.....</p>
                         <Image className='hover:cursor-pointer mb-2' width={30} height={30} src="/delete.svg" alt="delete icon" onClick={() => {
                             setIsDeleteModalOpen(true)
                         }}/>
@@ -98,11 +99,14 @@ export const Wallet = ({ wallet,isSolana,setWallets}: propTypes ) => {
                         <h3 className="font-medium text-white">Private Key</h3>
                         {isPrivKeyShown?
                         <div className='flex justify-between mt-2'>
-                            <p className=' pb-2  text-gray-500'>{window.innerWidth > 768 ? wallet.privateKey:`${wallet.privateKey.substring(0,33)}.....`}</p>
+                            <p className=' pb-2  text-gray-500 hidden 2xl:block'>{wallet.privateKey}</p>
+                            <p className=' pb-2  text-gray-500 md:block hidden 2xl:hidden'>{wallet.privateKey.substring(0,42)}.....</p>
+                            <p className=' pb-2  text-gray-500 block md:hidden'>{wallet.privateKey.substring(0,33)}.....</p>
                             <EyeOffIcon className='hover:cursor-pointer h-8 text-gray-200' onClick={() => setisPrivKeyShown(!isPrivKeyShown)}/>
                         </div>:
-                        <div className='flex justify-between'>
-                            <p className='text-white md:text-xl pb-2'>{window.innerWidth>768 ? '......................................................................................................................':'....................................................................'}</p>
+                        <div className='flex justify-between flex-wrap'>
+                            <p className='text-white md:text-xl pb-2 hidden xl:block'>.............................................................................................................</p>
+                            <p className='text-white md:text-xl pb-2 block xl:hidden'>....................................................................</p>
                             <EyeIcon className='hover:cursor-pointer h-8 mt-2 text-gray-200' onClick={() => setisPrivKeyShown(!isPrivKeyShown)}/>
                         </div>}
                     </div>
