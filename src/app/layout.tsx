@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html className="bg-black" lang="en">
       <body className={inter.className}>=
-        <div className="">
+        <div className="flex justify-center mx-2">
           <CubeLogo />
         </div>
         {children}

@@ -26,12 +26,12 @@ export const Wallet = ({ wallet,isSolana,setWallets}: propTypes ) => {
     // console.log(isSolana)
     // console.log(wallet.publicKey)
     return (
-        <div className='flex justify-center '>
+        <div className='flex justify-center md:mx-0 mx-2'>
             <div className="md:w-[64%]  w-screen mt-10 ">
                 {
                     isWalletDeleteModalOpen? 
                     <div className='fixed inset-0 backdrop-blur-sm flex z-50 flex-col justify-center items-center text-white'>
-                        <div className='flex flex-col border border-[#222] rounded-lg  bg-[#111] md:w-[30%] w-screen '>
+                        <div className='flex flex-col border border-[#222] rounded-lg  bg-[#111] sm:w-[40%] md:w-[30%] w-[60%] '>
                             <div className='text-xl mx-5 my-3 mt-7 font-semibold'>
                                 Are you sure you want to delete all wallets?
                             </div>

@@ -1,13 +1,13 @@
 export const CubeLogo = () => {
     return (
-      <div className="text-white flex w-2/5 justify-center mt-3">
+      <div className="text-white flex flex-start md:w-[67%] w-[100%] mt-3 ">
         <svg
           fill="#ffffff"
           version="1.1"
           id="Capa_1"
           xmlns="http://www.w3.org/2000/svg"
-          width="30px"
-          height="30px"
+          width="35px"
+          height="35px"
           viewBox="0 0 948.346 948.346"
           className="mt-1"
         >
