@@ -3,7 +3,7 @@
 export const WalletSelection = ({setIsEthereum,setIsSolana}:any) => {
     return (
         <div className="flex justify-center">
-            <div className="md:w-[67%] w-[100%] border border-white mt-32" >
+            <div className="md:w-[67%] w-[100%]  mt-32" >
                 <div className="text-white text-5xl font-bold  ml-2  w-[90%] md:w-[65%]">
                 WebVault: The vault where your crypto and peace of mind coexist.
                 </div>

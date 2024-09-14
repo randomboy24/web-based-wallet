@@ -181,19 +181,19 @@ export const SeedGenerator = ({ isSolana ,setIsSolana}: propTypes) => {
                     {isMnemonicModalOpen?<MnemonicModal setIsMnemonicModalOpen={setIsMnemonicModalOpen} mnemonic={mnemonic.split(" ")}/>:null}
                 </div>
             ) : (
-                <div>
-                    <div className='flex justify-center w-3/5 mt-20'>
-                        <div className='text-white text-5xl font-extrabold ml-2 md:ml-0'>
+                <div className='flex flex-col items-center mt-20 pl-2'>
+                    <div className='flex md:w-[67%] w-[100%] mt-20  ml-2 md:ml-0 '>
+                        <div className='text-white text-5xl font-extrabold'>
                             Secret Recovery Phrase
                         </div>
                     </div>
-                    <div className='flex justify-center 3'>
-                        <div className='text-gray-400 text-xl font-semibold ml-2 md:ml-0 pr-2 mt-2'>
+                    <div className='flex md:w-[67%] w-[100%] ml-2 md:ml-0 '>
+                        <div className='text-gray-400 text-xl font-semibold pr-2 mt-2'>
                             Warning: Copy and securely store your mnemonic phrase. If you lose it, you won’t be able to recover your wallet or access your funds!
                         </div>
                     </div>
-                    <div className='flex md:justify-center md:w-2/6 ml-2 md:ml-20 mt-3 md:pl-4'>
-                        <button title='import a wallet' className='bg-white h-12 w-20  rounded-md text-lg font-semibold md:ml-6 hover:bg-gray-800 hover:text-gray-200 transform transition-transform duration-300 hover:scale-105'
+                    <div className='flex md:w-[67%] w-[100%] md:ml-0 mt-3 '>
+                        <button title='import a wallet' className='bg-white h-12 w-20  rounded-md text-lg font-semibold  hover:bg-gray-800 hover:text-gray-200 transform transition-transform duration-300 hover:scale-105'
                         onClick={() => {
                             setIsImportingMnemonic(true)
                         }}>
