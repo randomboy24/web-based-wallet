@@ -1,110 +1,137 @@
-import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction} from "@solana/web3.js"
-import { useState } from "react"
-import bs58 from'bs58';
-
+import {
+  Connection,
+  Keypair,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  sendAndConfirmTransaction,
+  SystemProgram,
+  Transaction,
+} from "@solana/web3.js";
+import { useEffect, useRef, useState } from "react";
+import bs58 from "bs58";
 
 interface propTypes {
-    isSolana:boolean
-    pubKey:string,
-    privKey:string
+  isSolana: boolean;
+  pubKey: string;
+  privKey: string;
+  onClose: () => void; // 👈 close modal handler
 }
 
+export const TransactionModal = ({
+  isSolana,
+  pubKey,
+  privKey,
+  onClose,
+}: propTypes) => {
+  const [receiverPubKey, setReceiverPubKey] = useState("");
+  const [sendingAmount, setSendingAmount] = useState<number | "">("");
+  const modalRef = useRef<HTMLDivElement>(null);
 
-export const TransactionModal = ({isSolana,pubKey,privKey}:propTypes) => {
-    console.log(isSolana)
-    const [receiverPubKey,setReceiverPubKey] = useState("")
-    const [sendingAmount,setSendingAmount] = useState(0)
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
 
-    const addTransaction = async () => {
-        console.log(privKey)
-        
-        const connection = new Connection("https://solana-mainnet.g.alchemy.com/v2/3baDUOhezYw7SMpDwcabVbeJIMJPyp_N","confirmed")
+  const addTransaction = async () => {
+    try {
+      const connection = new Connection(
+        "https://api.devnet.solana.com",
+        "confirmed"
+      );
+      const senderKeypair = Keypair.fromSecretKey(bs58.decode(privKey));
+      const receiverPublicKey = new PublicKey(receiverPubKey);
 
-        const senderPubKey = new PublicKey(pubKey);
-        const receiverPublicKey = new PublicKey(receiverPubKey)
-        const transferInstruction = SystemProgram.transfer({
-            fromPubkey:senderPubKey,
-            toPubkey:receiverPublicKey,
-            lamports:sendingAmount * LAMPORTS_PER_SOL
+      const tx = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: senderKeypair.publicKey,
+          toPubkey: receiverPublicKey,
+          lamports: Number(sendingAmount) * LAMPORTS_PER_SOL,
         })
+      );
 
-        const transaction =  new Transaction().add(transferInstruction)
-        
-        // console.dir(transferInstruction, { depth: null });
-        // console.dir(transaction, { depth: null });
-        // console.log('Sender Public Key:', senderPubKey.toBase58());
-        // console.log('Receiver Public Key:', receiverPublicKey.toBase58());
-        // console.log(JSON.stringify(transferInstruction))
-        // console.log(JSON.stringify(transaction))
+      const { blockhash } = await connection.getLatestBlockhash();
+      tx.recentBlockhash = blockhash;
+      tx.feePayer = senderKeypair.publicKey;
 
-        const { blockhash } = await connection.getLatestBlockhash();
-        transaction.recentBlockhash = blockhash;
-        transaction.feePayer = senderPubKey;
-
-        const senderKeypair = Keypair.fromSecretKey(bs58.decode(privKey));
-
-        transaction.sign(senderKeypair)
-
-        const serializedTransaction = transaction.serialize().toString('base64')
-
-        console.log('serialized Transaction: ',serializedTransaction);
-
-        const sendResponse = await fetch("https://solana-mainnet.g.alchemy.com/v2/3baDUOhezYw7SMpDwcabVbeJIMJPyp_N", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                jsonrpc: "2.0",
-                id: 2,
-                method: "sendTransaction",
-                params: [serializedTransaction],    
-            }),
-        });
-        const sendResult = await sendResponse.json();
-console.log('Full Send Response:', sendResult);
-
-const transactionSignature = sendResult.result;
-
-if (!transactionSignature) {
-    console.error('Failed to obtain transaction signature:', sendResult);
-    return; // Exit if there's no valid transaction signature
-}
-
-console.log('Transaction Signature:', transactionSignature);
-
-// Confirm the transaction using confirmTransaction
-try {
-    const confirmation = await connection.confirmTransaction(transactionSignature, 'confirmed');
-    console.log('Transaction Confirmation:', confirmation);
-
-    if (confirmation.value?.err) {
-        console.error('Transaction failed:', confirmation.value.err);
-    } else {
-        console.log('Transaction confirmed successfully.');
+      const sig = await sendAndConfirmTransaction(connection, tx, [
+        senderKeypair,
+      ]);
+      console.log("✅ Signature:", sig);
+      alert("Transaction Sent ✅");
+      onClose();
+    } catch (err) {
+      console.error("❌ Transaction failed:", err);
+      alert("Transaction Failed ❌");
     }
-} catch (error) {
-    console.error('Error confirming transaction:', error);
-}
+  };
 
-    }
-    return (
-        <div className=" fixed inset-0 backdrop-blur-sm flex flex-col h-screen justify-center items-center text-white">
-            <label htmlFor="receiver">To: </label>
-            <input type="text" id="receiver" className="text-black"
-            onChange={(e) => {
-                setReceiverPubKey(e.target.value)
-            }} />
-            <label htmlFor="amount">{isSolana?"Sol: ":"Eth: "}</label>
-            <input type="text" id="amount" className="text-black"
-             onChange={(e) => {
-                setSendingAmount(parseInt(e.target.value))
-            }}
-            />
-            <button className="bg-white text-black mt-2" onClick={addTransaction}>
-                Send
-            </button>
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+      <div
+        ref={modalRef}
+        className="relative bg-white dark:bg-zinc-900 rounded-xl shadow-xl w-full max-w-md p-6 space-y-4"
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute right-2 top-0 text-neutral-300 hover:text-red-500 text-2xl font-bold"
+        >
+          ×
+        </button>
+
+        <h2 className="text-2xl font-semibold text-center text-zinc-900 dark:text-white">
+          {isSolana ? "Send SOL" : "Send ETH"}
+        </h2>
+
+        <div className="space-y-2">
+          <label
+            htmlFor="receiver"
+            className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          >
+            Receiver Address
+          </label>
+          <input
+            id="receiver"
+            type="text"
+            value={receiverPubKey}
+            onChange={(e) => setReceiverPubKey(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Enter receiver public key"
+          />
         </div>
-    )
-}
 
+        <div className="space-y-2">
+          <label
+            htmlFor="amount"
+            className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          >
+            Amount ({isSolana ? "SOL" : "ETH"})
+          </label>
+          <input
+            id="amount"
+            type="number"
+            value={sendingAmount}
+            onChange={(e) => setSendingAmount(parseFloat(e.target.value))}
+            className="w-full px-4 py-2 border rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Enter amount to send"
+          />
+        </div>
+
+        <button
+          onClick={addTransaction}
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  );
+};

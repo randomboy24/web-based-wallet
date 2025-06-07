@@ -1,4 +1,4 @@
-import React, { useState, useRef, Dispatch, SetStateAction } from 'react';
+import React, { useState, useRef, Dispatch, SetStateAction } from "react";
 
 interface propTypes {
   isMainnet: boolean;
@@ -6,16 +6,20 @@ interface propTypes {
 }
 
 const Dropdown = ({ isMainnet, setIsMainnet }: propTypes) => {
-    console.log(isMainnet)
+  console.log(isMainnet);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedNetwork, setSelectedNetwork] = useState(isMainnet ? 'Mainnet' : 'Devnet');
+  const [selectedNetwork, setSelectedNetwork] = useState(
+    isMainnet ? "Mainnet" : "Devnet"
+  );
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleMouseEnter = () => setIsOpen(true);
   const handleMouseLeave = () => {
-    // Delay to avoid flickering
     setTimeout(() => {
-      if (dropdownRef.current && !dropdownRef.current.contains(document.activeElement)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(document.activeElement)
+      ) {
         setIsOpen(false);
       }
     }, 100);
@@ -23,7 +27,7 @@ const Dropdown = ({ isMainnet, setIsMainnet }: propTypes) => {
 
   const handleSelectNetwork = (network: string) => {
     setSelectedNetwork(network);
-    setIsMainnet(network === 'Mainnet');
+    setIsMainnet(network === "Mainnet");
     setIsOpen(false);
   };
 
@@ -67,8 +71,8 @@ const Dropdown = ({ isMainnet, setIsMainnet }: propTypes) => {
               <span
                 className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => {
-                  handleSelectNetwork('Mainnet')
-                  setIsMainnet(true)
+                  handleSelectNetwork("Mainnet");
+                  setIsMainnet(true);
                 }}
               >
                 Mainnet
@@ -77,8 +81,9 @@ const Dropdown = ({ isMainnet, setIsMainnet }: propTypes) => {
             <li>
               <span
                 className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => {handleSelectNetwork('Devnet')
-                  setIsMainnet(false)
+                onClick={() => {
+                  handleSelectNetwork("Devnet");
+                  setIsMainnet(false);
                 }}
               >
                 Devnet
